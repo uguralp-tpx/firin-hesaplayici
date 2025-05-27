@@ -1,0 +1,30 @@
+from dearpygui.core import *
+from dearpygui.simple import *
+
+def hesapla_callback():
+    firin_yuku = get_value("Toplam Fırın Yükü (kg)")
+    elementler = ["Si", "Fe", "Mg", "Mn"]
+    hesap_sonucu = ""
+
+    for eleman in elementler:
+        nominal = get_value(f"{eleman} Nom (%)")
+        hedef_kg = firin_yuku * nominal / 100
+        hesap_sonucu += f"{eleman}: {hedef_kg:.2f} kg\n"
+
+    set_value("Sonuç", hesap_sonucu)
+
+with window("🧪 Fırın Alaşım Hesaplayıcı GUI", width=500, height=600):
+    add_input_float("Toplam Fırın Yükü (kg)", default_value=5000.0, min_value=0.0, step=100.0)
+    add_spacing()
+    add_text("🎯 Nominal Element Yüzdeleri (%)")
+    add_input_float("Si Nom (%)", default_value=0.35, min_value=0.0, max_value=10.0, step=0.01)
+    add_input_float("Fe Nom (%)", default_value=0.20, min_value=0.0, max_value=10.0, step=0.01)
+    add_input_float("Mg Nom (%)", default_value=0.08, min_value=0.0, max_value=10.0, step=0.01)
+    add_input_float("Mn Nom (%)", default_value=0.20, min_value=0.0, max_value=10.0, step=0.01)
+
+    add_spacing(count=2)
+    add_button("🔍 Hesapla", callback=hesapla_callback)
+    add_spacing()
+    add_input_text("Sonuç", default_value="", multiline=True, readonly=True, width=400, height=150)
+
+start_dearpygui()
